@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<section title="HTTP Integrity Header">
+
+  <section title="Credential Specification"
+    <section title="ticket=[Binary]">
+    
+    </section>
+    <section title="certificate=[Binary]">
+
+    </section>
+    <section title="id=[Label]">
+
+    </section>
+    <section title="ref=[Label]">
+
+    </section>
+  </section>
+  <section title="Cryptographic Enhancement"
+    <section title="mac=[Tagged-Binary]">
+
+    </section>
+    <section title="signature=[Tagged-Binary]">
+
+    </section>
+    <section title="encrypt=[Tagged-Binary]">
+      <t>
+        The encrypt attribute is used to state that the message body is
+        encrypted using the algorithm and initialization vector
+        specified in the encrypt attribute and the key associated 
+        with the specified credential.
+      </t>
+      <t>
+        The intended use for the encrypt attribute is in cases where
+        an encryption-with-integrity (EWI) algorithm is used though 
+        it MAY be used with encryption only algorithms. 
+      </t>
+      <t>
+        If the encrypt attribute is specified, the scope attributes
+        other than the method attribute are ignored and only the 
+        presence or absence of the method attribute is noted, the
+        value is ignored.
+      </t>
+      <t>
+        If the method attribute is present, the encrypted data 
+        contains a Request line
+      </t>
+    </section>
+    <section title="order=[Integer]">
+
+    </section>
+  </section>
+  <section title="Scope"
+    <t>
+      The scope attributes specify the data over which the 
+      cryptographic enhancements are applied. 
+    </t>
+    <t>
+      The order in which the attributes are specified is immaterial.
+      The data stream to which the enhancements are applied is
+      always constructed in the order:
+    </t>
+    <t>
+      <list>
+        <t>
+          Request Line or Status Line
+        </t>
+        <t>
+          Sequence
+        </t>
+        <t>
+          Content-Type
+        </t>
+        <t>
+          Content-Encoding
+        </t>
+        <t>
+          Content-Range
+        </t>
+        <t>
+          Body
+        </t>
+      </list>
+    </t>
+    <t>
+      All parts of the scope are optional. A HTTP message may have multiple
+      Integrity headers authenticating different parts of the message under
+      the same key.
+    </t>
+    <t>
+      If no scope attributes are specified, the scope is the HTTP body data
+      alone.
+      Otherwise the body is only part of the scope if the body attribute is
+      specified explicitly.
+    </t>
+    <section title="line=[Integer]">
+      <t>
+
+      </t>
+    </section>
+    <section title="sequence=[Integer]">
+      <t>
+
+      </t>
+    </section>    
+    <section title="content-type=[media-type]">
+      <t>
+
+      </t>
+    </section>
+    <section title="content-encoding=[content-coding]">
+      <t>
+
+      </t>
+    </section>
+    <section title="content-range">
+      <t>
+        
+      </t>
+    </section>    
+    <section title="body">
+      <t>
+
+      </t>
+    </section>    
+  </section>
+
+
+</section>

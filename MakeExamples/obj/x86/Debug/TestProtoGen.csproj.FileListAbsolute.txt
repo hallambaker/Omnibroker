@@ -1,0 +1,11 @@
+C:\Users\Phillip\Visual Studio 2010\Projects\ProtoGen\Example\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Phillip\Visual Studio 2010\Projects\ProtoGen\Example\bin\Debug\ConsoleApplication.exe
+C:\Users\Phillip\Visual Studio 2010\Projects\ProtoGen\Example\bin\Debug\ConsoleApplication.pdb
+C:\Users\Phillip\Visual Studio 2010\Projects\ProtoGen\Example\bin\Debug\Goedel.Protocol.dll
+C:\Users\Phillip\Visual Studio 2010\Projects\ProtoGen\Example\bin\Debug\Goedel.Protocol.pdb
+C:\Users\Phillip\Visual Studio 2010\Projects\ProtoGen\Example\obj\x86\Debug\ConsoleApplication.exe
+C:\Users\Phillip\Visual Studio 2010\Projects\ProtoGen\Example\obj\x86\Debug\ConsoleApplication.pdb
+C:\Users\Phillip\Visual Studio 2010\Projects\ProtoGen\Example\bin\Debug\Registry.dll
+C:\Users\Phillip\Visual Studio 2010\Projects\ProtoGen\Example\bin\Debug\Registry.pdb
+C:\Users\Phillip\Code\Applications\Omnibroker\Examples\obj\x86\Debug\ConsoleApplication.exe
+C:\Users\Phillip\Code\Applications\Omnibroker\Examples\obj\x86\Debug\ConsoleApplication.pdb

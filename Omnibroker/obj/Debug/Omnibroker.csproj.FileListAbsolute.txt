@@ -1,0 +1,7 @@
+C:\Users\Phillip\Code\Applications\Omnibroker\OmniLib\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Phillip\Code\Applications\Omnibroker\Omnibroker\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Phillip\Code\Applications\Omnibroker\Omnibroker\bin\Debug\OmniLib.dll
+C:\Users\Phillip\Code\Applications\Omnibroker\Omnibroker\bin\Debug\OmniLib.pdb
+C:\Users\Phillip\Code\Applications\Omnibroker\Omnibroker\obj\Debug\OmniLib.dll
+C:\Users\Phillip\Code\Applications\Omnibroker\Omnibroker\obj\Debug\OmniLib.pdb
+C:\Users\Phillip\Code\Applications\Omnibroker\Omnibroker\bin\Debug\Goedel.Registry.dll

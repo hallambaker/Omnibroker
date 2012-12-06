@@ -1,0 +1,257 @@
+Protocol OBPQuery   OBP
+
+	Message QMessage
+		Abstract
+
+	Message QRequest   
+		Abstract
+		Inherits QMessage
+		Description
+			|Every query request contains the following common elements:
+		Integer Index		
+			Description
+				|Index used to request a specific response when multiple 
+				|responses are available.
+
+	Message QResponse  
+		Abstract
+		Inherits QMessage
+		Description
+			|Every Query Response contains the following common elements:
+		Integer Status		
+			Required
+			Description
+				|Status return code value
+		Integer Index		
+			Description
+				|Index of the current response.
+		Integer Count		
+			Description
+				|Number of responses available.
+		Status Syntax
+		Status Refused
+		Status Authentication
+		Status ServerFailure
+		Status TimeOut
+		Status NotImplemented
+		Status TicketNotRecognized	
+
+	
+	Structure Identifier	
+		Description
+			|Specifies an Internet service by means of a DNS address and either a
+			|DNS service prefix, an IP port number or both. An Internet peer 
+			|connection MAY be specified by additionally specifying an account.
+		Name		Name			
+			Required
+			Description
+				|The DNS name of the service to connect to.
+			Description
+				|Internationalized DNS names MUST be encoded in punycode
+				|encoding.
+		Label Account		
+			Description
+				|Identifies the account to connect to in the case that a peer connection
+				|is to be established.
+		Name Service		
+			Description
+				|The DNS service prefix defined for use with DNS records that
+				|take a service prefix including SRV.
+		Integer Port		
+			Description
+				|IP Port number.
+			Description
+				|A service identifier MUST specify either a service or a port or both.						
+
+
+	Structure Connection	
+		String IPAddress	
+			Description
+				|IP address in string representation
+		Integer IPPort		
+			Description
+				|IP port. 1-65535
+		String Transport
+			Description
+				|Transport (RAW, TLS, IPSEC)
+		String TransportPolicy		
+			Description
+				|Transport security policy as specified in [TBS]
+		String ProtocolPolicy		
+			Description
+				|Application security policy specification as specified by 
+				|the application protocol.
+		Struct Advice Advice
+			Description
+				|Additional information that a service MAY return to support
+				|a service connection identification. 
+
+	Structure Credential
+		String Type
+		Binary	Data
+
+	Structure Advice 
+		Description
+			|Additional information that a service MAY return to support
+			|a service connection identification. For example, DNSSEC 
+			|signatures chains, SAML assertions, DANE records, 
+			|Certificate Transparency proof chains, etc.
+		Label Type			
+			Description
+				|The IANA MIME type of the content type
+		Binary Data			
+			Description
+				|The advice data.
+
+	Structure Service	
+		Description
+			|Describes a service connection
+		Struct Identifier Identifier
+			Multiple
+			Description
+				|Internet addresses to which the service is to be bound.
+		Struct Connection Connection
+			Description
+				|Service connection parameters.
+
+
+
+	Transaction QueryConnect  
+		Description
+			|Requests a connection context to connect to a specified Internet service
+			|or peer.
+		Request		QueryConnectRequest 
+		Response	QueryConnectResponse		
+		Status NonExistentDomain
+		Status PolicyViolation
+
+	Message QueryConnectRequest  
+		Inherits	QRequest
+		Description
+			|Specifies the Internet
+			|service or peer that a connection is to be established to and the
+			|acceptable security policies.
+
+		Struct Identifier	Identifier
+			Description
+				|Identifies the service or peer to which a connection is 
+				|requested.
+		Label Policy
+			Multiple
+			Description
+				|Acceptable credential validation policy.
+		Boolean ProveIt	
+			Description
+				|If set the broker SHOULD send advice to permit the client to
+				|validate the proposed connection context.
+
+	Message QueryConnectResponse  
+		Inherits	QResponse
+		Description
+			|Returns one or more connection contexts in response to a 
+			|QueryConnectRequest Message.
+		Struct Connection	Connection
+			Multiple
+			Description
+				|An ordered list of connection contexts with the preferred
+				|connection context listed first.
+		Struct Advice Advice
+			Description
+				|Proof information to support the proposed connection context.
+		Label Policy
+			Multiple
+			Description
+				|Policy under which the credentials have been verified.	
+
+	Transaction Advertise  
+		Description
+			|Advises a broker that one or more Internet services are 
+			|being offered with particular attributes.
+		Request		AdvertiseRequest 
+		Response	AdvertiseResponse
+
+	Message AdvertiseRequest  
+		Description
+			|Specifies the connection(s) to be established.
+		Description
+			|The attributes required depend on the infrastructure(s) that the 
+			|broker is capable of registering the service with.
+		Inherits	QRequest
+		Struct Service Service
+			Multiple
+			Description
+				|Describes a connection to be established.
+
+	Message AdvertiseResponse  
+		Description
+			|Specifies the connection(s)
+		Inherits	QResponse
+		Struct Service Service
+			Multiple
+			Description
+				|Describes a connection that was established.
+
+	Transaction Validate  
+		Description
+			|The Validate query requests validation of credentials
+			|presented to establish a connection. For example credentials
+			|presented by a server in the process of setting up a 
+			|TLS session.
+		Request		ValidateRequest 
+		Response	ValidateResponse
+
+
+	Message ValidateRequest  
+		Inherits	QRequest
+		Description
+			|Specifies the credentials to be validated and the purpose
+			|for which they are to be used.
+		
+		Struct Service	Service
+			Description
+				|Describes the service for which the credentials 
+				|are presented for access.
+		Struct Credential	Credential
+			Description
+				|List of credentials for which validation is requested.
+		Label Policy
+			Multiple
+			Description
+				|Policy under which the credentials have been verified.	
+
+	Message ValidateResponse  
+		Inherits	QResponse
+
+		Description
+			|Reports the status of the credential presented.
+		Label Policy	
+			Multiple
+			Description
+				|Policy under which the credentials have been verified.	
+		Status		Valid
+		Status		Revoked
+		Status		Danger
+
+	Transaction QueryCredentialPassword  
+		Description
+			|The QueryCredentialPassword query is used to request a password credential
+			|that the user has previously chosen to store at the broker.
+		Request		CredentialPasswordRequest 
+		Response	CredentialPasswordeResponse
+
+	Message CredentialPasswordRequest  
+		Inherits	QRequest
+		Description
+			|Requests a password for the specified account.
+		String Account		
+			Description
+				|The account for which a password is requested.
+
+	Message CredentialPasswordResponse  
+		Inherits	QResponse
+		Description
+			|Returns a password for the specified account.
+		String Password	
+			Description
+				|The requested password.
+

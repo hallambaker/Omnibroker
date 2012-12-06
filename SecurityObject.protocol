@@ -1,0 +1,18 @@
+! Abandoned for the time being
+! these appear to be better managed as part of the packaging scheme.
+Protocol OBPConnection OBP
+
+
+	Structure Message
+		Binary		ticket
+			Description
+				|The OBP ticket value established in the connection establishment 
+				|interaction. 
+		Binary		payload
+			Required
+			Description
+				|The OBP message payload
+		Binary		signature
+			Description
+				|Specifies the 
+

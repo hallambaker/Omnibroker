@@ -1,0 +1,9 @@
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPClient\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPClient\bin\Debug\OBPClient.exe
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPClient\bin\Debug\OBPClient.pdb
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPClient\bin\Debug\Goedel.Registry.dll
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPClient\bin\Debug\OmniLib.dll
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPClient\bin\Debug\Goedel.Protocol.dll
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPClient\bin\Debug\OmniLib.pdb
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPClient\obj\x86\Debug\OBPClient.exe
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPClient\obj\x86\Debug\OBPClient.pdb

@@ -1,0 +1,70 @@
+﻿Class Omnibroker Configure
+	TopType Connect
+		Id		ID Handle
+		Domain	String
+		Options Options
+			Port						Port	Single
+			Secrets						Seed	Multiple
+			EncryptionAlgorithms		Encryption Multiple
+			AuthenticationAlgorithms	Authentication Multiple
+			Administrators				Administrator Multiple
+
+
+	TopType Query
+		Id		ID Handle
+		Options Options
+			Secret						Seed Multiple
+	
+
+	TopType Client
+		Id			ID Handle
+		Account		String
+		Service		String
+		Options Options
+			Scopes						Scope  Multiple
+			Secret						Secret Single
+			Ticket						Ticket Single 
+			EncryptionAlgorithm			Encryption Single
+			AuthenticationAlgorithm		Authentication Single
+			Expires						Expires Single
+			Connections					Connection Multiple
+
+	Type Administrator
+		Account		String
+
+	Type Connection
+		Options Options
+			Scopes						Scope Multiple
+			Secret						Secret Single
+			Ticket						Ticket Single
+			EncryptionAlgorithm			Encryption Single
+			AuthenticationAlgorithm		Authentication Single
+			Expires						Expires Single
+
+	Type Seed
+		Data	String
+		Expiry	String
+
+	Type Secret
+		Data	String
+			
+	Type Ticket
+		Data	String
+	
+	Type Port
+		Data	Integer
+
+	Type Address
+		IP		String
+
+	Type Scope
+		Domain	String
+
+	Type Expires
+		Expiry	String
+
+	Type Encryption
+		Algorithm	String
+
+	Type Authentication
+		Algorithm	String

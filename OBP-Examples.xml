@@ -1,0 +1,282 @@
+<!-- Begin section of automatically generated text
+Line wrap = 66
+   -->
+        <section title="Illustrative example">
+          <t>
+            Alice is an employee of Example Inc. which runs its own
+            local omnibroker service 'example.com'.  
+To configure her machine for use
+            with this service, Alice contacts her network
+            administrator who assigns her the account identifier
+            'alice' and obtains a PIN number from the service  
+            '440270-700N08-F041'
+          </t>
+          <t>
+            Alice enters the values 'alice@example.com' and
+            '440270-700N08-F041' into her Omnibroker-enabled  
+            Web browser.
+          </t>
+          
+          <t>
+            The Web browser uses the local DNS to resolve
+            'example.com'
+            and establishes a HTTPS connection to the specified IP
+             address.
+            The client verifies that the certificate presented has
+             a valid
+            certificate chain to an embedded trust anchor under an  
+            appropriate certificate policy (e.g. compliant with
+            Extended Validation
+            Criteria defined by CA-Browser Forum).
+          </t>
+          <t>
+            Having established an authenticated and encrypted TLS  
+            session to the Omnibroker service, the client sends
+            an OpenRequest message to begin the process of mutual  
+            authentication. This message specifies the
+            cryptographic
+            parameters supported by the client (Authentication,
+            Encryption)
+            and a nonce value (Challenge), device identification
+            parameters (DeviceID, DeviceURI, DeviceName) and the
+            name of the account being requested.
+          </t>
+          <t>
+            The client does not specify the PIN code in the
+            request,  
+            nor is the request authenticated. Instead the client
+            informs
+            the server that it has a PIN code that can be supplied
+             if
+            necessary.  
+          </t>
+          <figure>
+            <artwork>Post / HTTP/1.1
+Host: example.com
+Cache-Control: no-store
+Content-Type: Application/json;charset=UTF-8
+Content-Length: 389
+
+<![CDATA[{"OpenRequest": {  "Encryption":
+  ["HS256","HS384","HS512","HS256T128"],
+  "Authentication": ["A128CBC","A256CBC","A128GCM","A256GCM"],
+  "Account": "alice",
+  "Domain": "example.com",
+  "HavePasscode": true,
+  "HaveDisplay": true,
+  "Challenge": "cpTr1KWdUcF3LjwjGMlR5w==",
+  "DeviceID": "Serial:0002212",
+  "DeviceURI": "http://comodo.com/dragon/v3.4",
+  "DeviceName": "Comodo Dragon"}
+}
+]]>
+            </artwork>
+          </figure>
+
+          <t>
+            The service receives the request. If the request is
+            consistent  
+            with the access control policy for the server it
+            returns a  
+            reply that specifies the chosen cryptographic
+            parameters  
+            (Cryptographic), responds to the client issued by the  
+            client to establish server proof of knowsledge of the
+             PIN
+            (ChallengeResponse) and issues a challenge to the
+            client  
+            (Challenge).
+          </t>
+          <t>
+            The cryptographic parameters specify algorithms to be
+             used  
+            for encryption and authentication, a shared secret and
+             a  
+            ticket value. Note that while the shared secret is
+            exchanged  
+            in plaintext form in the HTTP binding, the connection
+            protocol MUST provide encryption.
+          </t>
+          <figure>
+            <artwork>Post / HTTP/1.1
+Host: example.com
+Cache-Control: no-store
+Content-Type: Application/json;charset=UTF-8
+Content-Length: 449
+
+<![CDATA[{"OpenResponse": {  "Status": 203,
+  "StatusDescription": "Passcode",
+  "Cryptographic": [{  "Protocol": "OBPConnection",
+  "Secret": "cSzrQHGh9SAbqlzFXdvIXQ==",
+  "Encryption": "A128CBC",
+  "Authentication": "HS256",
+  "Ticket":
+  "AAAAAHEs60BxofUgG6pcxV3byF0RYWxpY2VAZXhhbXBsZS5jb21ylOvUpZ1RwXcu
+    PCMYyVHn/XLBsTQATbINeJl0Zrw5NR8SfoWmIFEkOUD1PdqSFQ0A"}
+],
+  "Challenge": "/XLBsTQATbINeJl0Zrw5NQ==",
+  "ChallengeResponse": "bh0LYYrTk5vH5jQ1Ocm6kA=="}
+}
+]]>
+            </artwork>
+          </figure>
+
+          <t>
+            To complete the transaction, the client sends a
+            TicketRequest message
+            to the serice containing a response to the PIN
+            challenge sent by the
+            service (ChallengeResponse).
+            The TicketRequest message is authenticated under the
+            shared secret specified
+            in the OpenResponse message.
+          </t>
+
+          <figure>
+            <artwork>
+<![CDATA[HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 204
+Content-Integrity:
+  mac=ZKm7O7cnU/QF8olQi2Qhz6D2or8bfeKswr67tGDQGAE=;  
+  ticket=AAAAAHEs60BxofUgG6pcxV3byF0RYWxpY2VAZXhhbXBsZS5jb21ylOvUpZ
+    1RwXcuPCMYyVHn/XLBsTQATbINeJl0Zrw5NR8SfoWmIFEkOUD1PdqSFQ0A
+Cache-Control: no-store
+Pragma: no-cache
+
+{"TicketRequest": {  "Ticket":
+  "AAAAAHEs60BxofUgG6pcxV3byF0RYWxpY2VAZXhhbXBsZS5jb21ylOvUpZ1RwXcu
+    PCMYyVHn/XLBsTQATbINeJl0Zrw5NR8SfoWmIFEkOUD1PdqSFQ0A",
+  "ChallengeResponse": "xxdSuZthZNJGvH6UYX0Tzw=="}
+}
+]]>
+            </artwork>
+          </figure>
+
+
+<t>
+  If the response to the PIN challenge is correct, the service
+  responds
+  with a message that specifies a set of cryptographic parameters
+   to be
+  used to authenticate future interactions with the service
+  (Cryptographic)  
+  and a set of connection parameters for servers supporting the  
+  Query Service (Service).
+</t>
+  <t>
+    In this case the server returns three connections, each
+    offering a
+    different transport protocol option. Each connection specifies
+     its
+    own set of cryptographic parameters (or will when the code is
+     written
+    for that).
+  </t>
+          <figure>
+            <artwork>
+<![CDATA[HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 626
+Cache-Control: no-store
+Pragma: no-cache
+
+{"TicketResponse": {  "Status": 200,
+  "StatusDescription": "Complete",
+  "Cryptographic": [{  "Protocol": "OBPConnection",
+  "Secret": "Upxwik3aJtiFWyCD+/ItRA==",
+  "Encryption": "A128CBC",
+  "Authentication": "HS256",
+  "Ticket": "AAAAAFKccIpN2ibYhVsgg/vyLUQBQC7VZwknmix04vZGJ8JoCqY="}
+],
+  "Service": [{  "Name": "obp1.example.com",
+  "Port": 443,
+  "Address": "10.1.2.3",
+  "Priority": 1,
+  "Weight": 100}
+,{  "Name": "dns1.example.com",
+  "Port": 53,
+  "Address": "10.1.2.2",
+  "Priority": 1,
+  "Weight": 100}
+,{  "Name": "udp.example.com",
+  "Port": 5000,
+  "Address": "10.1.2.2",
+  "Priority": 1,
+  "Weight": 100}
+]}
+}
+]]>
+            </artwork>
+          </figure>
+
+          <t>
+            When Alice's machine is to be transfered to another
+            employee, the  
+            Unbind transaction is used. The only parameter
+            is the
+            Ticket identifying the device association (Ticket).
+          </t>
+          <figure>
+            <artwork>Post / HTTP/1.1
+Host: example.com
+Cache-Control: no-store
+Content-Type: Application/json;charset=UTF-8
+Content-Length: 89
+Content-Integrity:
+  mac="Dcp1+/DU10BwEx/zRgSjt1OozPOawKXw2KDGLpXmFXA=";
+  ticket="AAAAAFKccIpN2ibYhVsgg/vyLUQBQC7VZwknmix04vZGJ8JoCqY="
+
+<![CDATA[{"UnbindRequest": {  "Ticket":
+  "AAAAAFKccIpN2ibYhVsgg/vyLUQBQC7VZwknmix04vZGJ8JoCqY="}
+}
+]]>
+            </artwork>
+          </figure>
+
+          <t>
+            Since the unbind response represents the termination
+            the
+            relationship with the Omnibroker, the response merely
+             reports
+            the success or failure of the request.
+          </t>
+          <figure>
+            <artwork>
+<![CDATA[HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 24
+Cache-Control: no-store
+Pragma: no-cache
+
+{"UnbindResponse": {}
+}
+]]>
+            </artwork>
+          </figure>
+
+          <t>
+            The 'Ticket' value presented in the foregoing examples
+             is  
+            a sequence of binary data generated by the service
+            is
+            opaque to the client. Services MAY generate ticket
+            values  
+            with a substructure that enable the service to avoid
+            the need to maintain server side state.
+          </t>
+        <t>
+          In the foregoing example, the ticket structures generated
+          by the service encode the cryptographic parameter data,
+          the shared secret, account identifier and an
+          authentication  
+          value. The initial ticket value generated additionally
+          encodes
+          the values of the client and service challeng values for
+           use
+          in calculating the necessary ChallengeResponse.
+          </t>
+      
+        </section>
+
+<!-- End section of automatically generated text -->

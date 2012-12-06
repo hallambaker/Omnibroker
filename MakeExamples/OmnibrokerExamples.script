@@ -1,0 +1,520 @@
+﻿#script 1.0
+#license MITLicense
+#using TestProtoGen
+#using Goedel.Protocol
+#using OBPConnection
+#pclass OmnibrokerExample Generate
+#% string Service;
+#% DateTime Now;
+#method ConnectionExample ExampleData Example
+#% Service = Example.OmnibrokerService;
+#% WrapWriter WrapWriter = (WrapWriter) _Output;
+#% WrapWriter.MinLeading = "  ";
+#% WrapWriter.WrappedLeading = "  ";
+#% WrapWriter.Width = 66;
+<!-- Begin section of automatically generated text
+	Line wrap = #{WrapWriter.Width}
+   -->
+        <section title="Illustrative example" anchor="ConnectionRequestExample">
+          <t>
+            Alice is an employee of Example Inc. which runs its own
+            local omnibroker service '#{Example.OmnibrokerService}'. 
+			To configure her machine for use
+            with this service, Alice contacts her network
+            administrator who assigns her the account identifier
+            '#{Example.Username}' and obtains a PIN number from the service 
+            '#{Example.PIN}'
+          </t>
+          <t>
+            Alice enters the values '#{Example.Username}@#{Example.OmnibrokerService}' and
+            '#{Example.PIN}' into her Omnibroker-enabled 
+            Web browser.
+          </t>
+          
+          <t>
+            The Web browser uses the local DNS to resolve '#{Example.OmnibrokerService}'
+            and establishes a HTTPS connection to the specified IP address.
+            The client verifies that the certificate presented has a valid
+            certificate chain to an embedded trust anchor under an 
+            appropriate certificate policy (e.g. compliant with the Extended Validation
+            Criteria defined by CA-Browser Forum).
+          </t>
+          <t>
+            Having established an authenticated and encrypted TLS 
+            session to the Omnibroker service, the client sends
+            an OpenRequest message to begin the process of mutual 
+            authentication. This message specifies the cryptographic
+            parameters supported by the client (Authentication, Encryption)
+            and a nonce value (Challenge), device identification
+            parameters (DeviceID, DeviceURI, DeviceName) and the
+            name of the account being requested.
+          </t>
+          <t>
+            The client does not specify the PIN code in the initial request, 
+            nor is the request authenticated. Instead the client informs
+            the server that it has a PIN code that can be supplied if
+            necessary. 
+          </t>
+#call ExampleWSMessage Example.OpenRequest
+          <t>
+            The service receives the request. If the request is consistent 
+            with the access control policy for the server it returns a 
+            reply that specifies the chosen cryptographic parameters 
+            (Cryptographic), responds to the client issued by the 
+            client to establish server proof of knowsledge of the PIN
+            (ChallengeResponse) and issues a challenge to the client 
+            (Challenge).
+          </t>
+          <t>
+            The cryptographic parameters specify algorithms to be used 
+            for encryption and authentication, a shared secret and a 
+            ticket value. Note that while the shared secret is exchanged 
+            in plaintext form in the HTTP binding, the connection
+            protocol MUST provide encryption.
+          </t>
+#call ExampleWSMessage Example.OpenResponse
+          <t>
+            To complete the transaction, the client sends a TicketRequest message
+            to the serice containing a response to the PIN challenge sent by the
+            service (ChallengeResponse).
+            The TicketRequest message is authenticated under the shared secret specified
+            in the OpenResponse message.
+          </t>
+
+#call ExampleWSMessage Example.TicketRequest
+
+<t>
+  If the response to the PIN challenge is correct, the service responds
+  with a message that specifies a set of cryptographic parameters to be
+  used to authenticate future interactions with the service (Cryptographic) 
+  and a set of connection parameters for servers supporting the 
+  Query Service (Service).
+</t>
+  <t>
+    In this case the server returns three connections, each offering a
+    different transport protocol option. Each connection specifies its
+    own set of cryptographic parameters (or will when the code is written
+    for that).
+  </t>
+#call ExampleWSMessage Example.TicketResponse
+          <t>
+            When Alice's machine is to be transfered to another employee, the 
+            Unbind transaction is used. The only parameter required is the
+            Ticket identifying the device association (Ticket).
+          </t>
+#call ExampleWSMessage Example.UnbindRequest
+          <t>
+            Since the unbind response represents the termination of the
+            relationship with the Omnibroker, the response merely reports
+            the success or failure of the request.
+          </t>
+#call ExampleWSMessage Example.UnbindResponse
+          <t>
+            The 'Ticket' value presented in the foregoing examples is 
+            a sequence of binary data generated by the service that is
+            opaque to the client. Services MAY generate ticket values 
+            with a substructure that enable the service to avoid
+            the need to maintain server side state.
+          </t>
+        <t>
+          In the foregoing example, the ticket structures generated
+          by the service encode the cryptographic parameter data,
+          the shared secret, account identifier and an authentication 
+          value. The initial ticket value generated additionally encodes
+          the values of the client and service challeng values for use
+          in calculating the necessary ChallengeResponse.
+          </t>
+      
+        </section>
+
+		<!-- End section of automatically generated text -->
+#end method
+
+
+#method QueryExample ExampleData Example
+#% Service = Example.OmnibrokerService;
+#% WrapWriter WrapWriter = (WrapWriter) _Output;
+#% WrapWriter.MinLeading = "  ";
+#% WrapWriter.WrappedLeading = "  ";
+#% WrapWriter.Width = 66;
+<!-- Begin section of automatically generated text
+	Line wrap = #{WrapWriter.Width}
+   -->
+
+        <section title="Illustrative example">
+		  <t>
+			[For illustrative purposes, all the examples in this section
+			are shown using the Web Services Transport binding. 
+			Examples of other transport bindgins are shown in 
+			section [TBS].]
+		  </t>
+          <t>
+		     The Alice of the previous example uses her Web browser to
+			 access the URL #{Example.QueryConnectURL}. Assuming this was done while
+			 the prior binding was still active (i.e. before the UnbindRequest
+			 message was sent), the Web browser would send a QueryConnectRequest 
+			 request to obtain the best connection parameters for the 
+			 #{Example.QueryConnectSite} protocol at 
+			 #{Example.QueryConnectProtocol}:
+		  </t>
+
+#call ExampleWSMessage Example.QueryConnectRequest
+		<t>
+			The service responds with an ordered list of possible connections.
+			In this case the site is accessible via plain TCP transport or with
+			TLS. Since TLS is the preferred protocol, that connection is
+			listed first.
+		</t>
+#call ExampleWSMessage Example.QueryConnectResponse
+		<t>
+			Although the QueryConnectResponse returned the hash of a PKIX
+			certificate considered valid for that connection, the server
+			returns a different certificate which the client verifies using
+			the ValidateRequest query.
+
+		</t>
+#call ExampleWSMessage Example.QueryValidateRequest
+		<t>
+			The service validates the certificate according to the 
+			Omnibroker service policy. 
+		</t>
+#call ExampleWSMessage Example.QueryValidateResponse
+		</section>
+
+
+		<!-- End section of automatically generated text -->
+#end method
+
+
+#method MutualAuth ExampleData Example
+
+    <section title ="Mutual Authentication" anchor="MutualAuth">
+      <t>
+        A Connection Service MAY require that a connection request be 
+        authenticated. Three authentication mechanisms are defined.
+      </t>
+      <t>
+        <list>
+          <t>
+            PIN Code: The client and server demonstrate mutual knowledge of
+            a PIN code previously exchanged out of band.
+          </t>
+          <t>
+            Established Key: The client and server demonstrate knowledge of the
+            private key associated with a credential previously 
+            established. This MAY be a public key or a symmetric key.
+          </t>
+          <t>
+            Out of Band Confirmation: The request for access is 
+            forwarded to an out of band confirmation service.
+          </t>
+        </list>
+      </t>
+    
+      <section title ="PIN Authentication" anchor="ChallengeResponse">
+
+        <t>
+          [Motivation]
+        </t>
+        <t>
+          Although the PIN value is never exposed on the wire in any form,
+          the protcol considers the PIN value to be a text string encoded 
+          in UTF8 encoding.
+        </t>
+        <t>
+          [Considerations for PIN character set choice discussed in body
+          of draft, servers MUST support numeric only, clients SHOULD 
+          support full Unicode]
+        </t>
+        <t>
+          The PIN Mechanism is a three step process:
+        </t>
+        <t>
+          <list>
+            <t>
+              The client sends an OpenRequest message to the Service containing 
+              a challenge value CC.
+            </t>
+            <t>
+              The service returns an OpenResponse message containing to the client a server
+              challenge value SV and a server response value SR.
+            </t>
+            <t>
+              The client sends a TicketRequest message to the service containing
+              a client response value CR.
+            </t>
+          </list>
+        </t>
+        <t>
+          Since no prior authentication key has been established, the 
+          OpenRequest and OpenResponse messages are initially sent without 
+          authentication and authentication values established by the
+          Challenge-Response mechanism.
+        </t>
+        <t>
+          The Challenge values CC,  and SC are cryptographic nonces. The nonces 
+          SHOULD be generated using an appropriate cryptographic random
+          source. The nonces MUST be at least as long as 128 bits, MUST be at least 
+          the minimum key size 
+          of the authentication algorithm used and MUST NOT more than 640 bits 
+          in length (640 bits should be enough for anybody).
+        </t>
+        <t>
+          The server response and client response values are generated
+          using an authentication algorithm selected by the server from the
+          choices proposed by the client in the OpenRequest message.
+        </t>
+        <t>
+          The algorithn chosen may be a MAC algorithm or an 
+          encrypt-with-authentication (EWA) algorithm. If an EWA is specified, 
+          the encrypted data is discarded and only the authentication 
+          value is used in its place.
+        </t>
+        <t>
+          Let A(d,k) be the authentication value obtained by applying the 
+          authentication algorithm with key k to data d.
+        </t>
+        <t>
+          To create the Server Response value, the UTF8 encoding of the
+          PIN value 'P' is 
+          first converted into a symmetric key KPC by using the Client
+          challenge value as the key
+          truncating if necessary and then applied to the payload of the
+          OpenRequest message:
+        </t>
+        <t>
+          KPC = A (PIN, CC)
+          SR = A (Secret + SC + OpenRequest, KPC)
+        </t>
+        <t>
+          In the Web Service Binding, the Payload of the message is the 
+          HTTP Body as presented on the wire. The Secret and Server 
+          Challenge are presented in their
+          binary format and the '+' operator stands for simple concatenation
+          of the binary sequences.
+        </t>
+        <t>
+          This protocol construction ensures that the party constructing
+          SR:
+        </t>
+        <t>
+          <list>
+            <t>
+              Knows the PIN code value (through the construction of KPC).
+            </t>
+            <t>
+              Is responding to the Open Request Message (SR depends on 
+              OpenRequest).
+            </t>
+            <t>
+              Has knowlege of the secret key which MUST be used to 
+              authenticate the following TicketRequest/TicketResponse
+              interaction that will establish the actual connection.
+            </t>
+            <t>
+              Does not provide an oracle the PIN value. That is, the protocol 
+              does not provide a service that reveals the (since the value SR
+              includes the value SC which is a random nonce generated
+              by the server and cannot be predicted by the client).
+            </t>
+          </list>
+        </t>
+
+        <t>
+          To create the Client Response value, secret key is applied 
+          to the PIN value and server Challenge:
+        </t>
+        <t>
+          CR = A (PIN + SC + OpenRequest, Secret)
+        </t>
+                <t>
+          Note that the server can calculate the value of the Client Response
+          token at the time that it generates the Server Challenge.
+          This minimizes the amount of state that needs to be carried from 
+          one request to the next in the Ticket value when using the stateless
+          server implementation described in section <xref target="stateless"/>
+        </t>
+        <t>
+          This protocol construction ensures that the constructor of CR
+        </t>
+        <t>
+          <list>
+            <t>
+              Knows the PIN value.
+            </t>
+            <t>
+              Is respoding to the OpenResponse generated by the server.
+            </t>
+          </list>
+        </t>
+        <t>
+          Note that while disclosure of an oracle for the PIN value is a 
+          concern in the 
+          construction of CR, this is not the case in the construction of 
+          SR since the client has already demonstrated knowledge of the 
+          PIN value.
+        </t>
+
+        </section>
+
+        <section title="Example: Latin PIN Code">
+          <t>
+            The Connection Request example of section 
+            <xref target="ConnectionRequestExample"/> demonstrates the use
+            of an alphanumeric PIN code using the Latin alphabet.
+          </t>
+          <t>
+            The PIN code is [] and the authentication algorithm is [].
+            The value KP is thus:
+          </t>
+          <t>
+            [TBS]
+          </t>
+          <t>
+            The data over which the hash value is calulated is
+            Secret + SC + OpenRequest:
+          </t>
+          <t>
+            [TBS]
+          </t>
+          <t>
+            Applying the derrived key to the data produces the server 
+            response:
+          </t>
+          <t>
+            The data for the client response is PIN + SC:
+          </t>
+          <t>
+            [TBS]
+          </t>
+          <t>
+            Applying the secret key to the data produces the client
+            response:
+          </t>
+          <t>
+            [TBS]
+          </t>
+        </section>
+        <section title="Example: Cyrillic PIN Code">
+          <t>
+            If the PIN code in the earlier example was [] the
+            value KP would be:
+          </t>
+          <t>
+            [TBS]
+          </t>          
+          <t>
+            The Server Response would be:
+          </t>
+          <t>
+            [TBS]
+          </t>
+          <t>
+            The rest of the protocol would then continue as before.
+          </t>
+        </section>
+      <section title="Stateless server" anchor="stateless">
+        <t>
+          The protocol is designed to permit but not require a stateless
+          implementation by the server using the Ticket value generated by the 
+          server to pass state from the first server transaction to the
+          second.
+        </t>
+        <t>
+          In the example shown in <xref target="ConnectionRequestExample"/>, 
+        the server generates a 'temporary ticket' containing the 
+        following information:
+        </t>
+
+        <t>
+          If a server uses the Ticket to transmit state in this way it
+          MUST protect the confidentiality of the ticket using a strong
+          means of encryption and authentication.
+         </t>
+      </section>
+      <section title ="Established Key" anchor="PublicKeyAuth">
+        <t>
+          The Established Key mechanism is used when the parties have
+          an existing shared key or public key credential.
+        </t>
+        <t>
+          The 
+          [Open request open response are authenticated under the
+          respective keys]
+        </t>
+        <t>
+          SR=CC, CR=SC
+        </t>
+      </section>
+      <section title ="Out of Band Confirmation" anchor="OOBConfirmation">
+        <t>
+          The Out Of Band Confirmation mechanism is a three step 
+          process in which:
+        </t>
+        <t>
+          <list>
+            <t>
+              The client makes an OpenRequest message to the service
+              and obtains an OpenResponse message.
+            </t>
+            <t>
+              The service is informed that the service has been
+              authorized through an out of band process.
+            </t>
+            <t>
+              The client makes a TicketRequest to the service
+              and obtains a TicketResponse message to complete 
+              the exchange.
+            </t>
+          </list>
+        </t>
+        <t>
+          Since no prior authentication key has been established, the 
+          OpenRequest and OpenResponse messages are sent without 
+          authentication.
+        </t>
+        <t>
+          The principal concern in the Out Of Band Confirmation 
+          mechanism is ensuring that the party authorizing the
+          request is able to identify which party originated
+          the request they are attempting to identify.
+        </t>
+        <t>
+          If a device has the ability to display an image it
+          MAY set the HasDisplay=true in the OpenRequest message.
+          If the broker recieves an OpenRequest with the HasDisplay
+          value set to true, the OpenResponse MAY contain one or more
+          VerificationImage entries specifying image data that is 
+          to be displayed to the user by both the client and the
+          confirmation interface.
+        </t>
+        <t>
+          Before confirming the request, the user SHOULD verify 
+          that the two images are the same and reject the request
+          in the case that they are not.
+        </t>
+        <t>
+          Many devices do not have a display capability, in particular
+          an embedded device such as a network switch or a thermostat.
+          In this case the device MAY be identified by means of the
+          information provided in 
+          DeviceID, DeviceURI, DeviceImage and DeviceName.
+        </t>
+      </section>
+    </section>
+
+#end method
+
+
+#method ExampleWSMessage BoundMessage Message
+          <figure>
+            <artwork>
+<![CDATA[#{Message.HTTPBinding}]]>
+            </artwork>
+          </figure>
+
+#end method
+
+
+
+#end pclass

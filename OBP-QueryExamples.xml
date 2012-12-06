@@ -1,0 +1,127 @@
+<!-- Begin section of automatically generated text
+Line wrap = 66
+   -->
+
+        <section title="Illustrative example">
+  <t>
+[For illustrative purposes, all the examples in this section
+are shown using the Web Services Transport binding.  
+Examples of other transport bindgins are shown in  
+section [TBS].]
+  </t>
+          <t>
+     The Alice of the previous example uses her Web browser to
+ access the URL www.example.com://www.example.com/. Assuming this
+   was done while
+ the prior binding was still active (i.e. before the UnbindRequest
+ message was sent), the Web browser would send a
+  QueryConnectRequest  
+ request to obtain the best connection parameters for the  
+ http protocol at  
+ www.example.com:
+  </t>
+
+          <figure>
+            <artwork>
+<![CDATA[Post / HTTP/1.1
+Host: example.com
+Cache-Control: no-store
+Content-Type: Application/json;charset=UTF-8
+Content-Length: 131
+Content-Integrity:
+  mac=BfpMWTx5yhGuwQXhTZtGSHDuPzvgdjYLDS0Ko0vbYNY=;
+  ticket=6JhkobO5VTxwwMIn2waC0+6tMoLL+vD8XmFM2oUzqFrDFVpeN9+AxdBQR/
+    KOgl5hXCJYJpKo4wQgUTV3E/QnxGcHHc2aVSiWTcna88s84sQ=
+
+{
+  "QueryConnectRequest": {
+    "Identifier": {
+      "Name": "http",
+      "Service": "www.example.com",
+      "Port": 80}}}]]>
+            </artwork>
+          </figure>
+
+<t>
+The service responds with an ordered list of possible connections.
+In this case the site is accessible via plain TCP transport or with
+TLS. Since TLS is the preferred protocol, that connection is
+listed first.
+</t>
+          <figure>
+            <artwork>
+<![CDATA[HTTP/1.1 200  
+Content-Type: application/json;charset=UTF-8
+Content-Length: 347
+Content-Integrity:
+  mac=bgDFDBgfnmvE66ma7B+7XZ3sho49JWgU0V+fdBdfqPI=;
+  ticket=6JhkobO5VTxwwMIn2waC0+6tMoLL+vD8XmFM2oUzqFrDFVpeN9+AxdBQR/
+    KOgl5hXCJYJpKo4wQgUTV3E/QnxGcHHc2aVSiWTcna88s84sQ=
+
+{
+  "QueryConnectResponse": {
+    "Status": 200,
+    "Connection": [{
+        "IPAddress": "10.3.2.1",
+        "IPPort": 443,
+        "Transport": "TLS",
+        "TransportPolicy": "TLS=Optional",
+        "ProtocolPolicy": "Strict"},
+      {
+        "IPAddress": "10.3.2.1",
+        "IPPort": 80,
+        "ProtocolPolicy": "Strict"}]}}]]>
+            </artwork>
+          </figure>
+
+<t>
+Although the QueryConnectResponse returned the hash of a PKIX
+certificate considered valid for that connection, the server
+returns a different certificate which the client verifies using
+the ValidateRequest query.
+
+</t>
+          <figure>
+            <artwork>
+<![CDATA[Post / HTTP/1.1
+Host: example.com
+Cache-Control: no-store
+Content-Type: Application/json;charset=UTF-8
+Content-Length: 124
+Content-Integrity:
+  mac=VBZp1ruh+2F7kZhLxL95Eb9oG1agWyiv9BK7myEJ2WE=;
+  ticket=6JhkobO5VTxwwMIn2waC0+6tMoLL+vD8XmFM2oUzqFrDFVpeN9+AxdBQR/
+    KOgl5hXCJYJpKo4wQgUTV3E/QnxGcHHc2aVSiWTcna88s84sQ=
+
+{
+  "ValidateRequest": {
+    "Credential": {
+      "Type": "application/x-x509-server-cert",
+      "Data": "AAECAwQ="}}}]]>
+            </artwork>
+          </figure>
+
+<t>
+The service validates the certificate according to the  
+Omnibroker service policy.  
+</t>
+          <figure>
+            <artwork>
+<![CDATA[HTTP/1.1 200  
+Content-Type: application/json;charset=UTF-8
+Content-Length: 47
+Content-Integrity:
+  mac=yjp8j5p7P8RbaEK+7924/cEwP2zaHmso3gKfJmCGuzQ=;
+  ticket=6JhkobO5VTxwwMIn2waC0+6tMoLL+vD8XmFM2oUzqFrDFVpeN9+AxdBQR/
+    KOgl5hXCJYJpKo4wQgUTV3E/QnxGcHHc2aVSiWTcna88s84sQ=
+
+{
+  "ValidateResponse": {
+    "Status": 200}}]]>
+            </artwork>
+          </figure>
+
+</section>
+
+
+<!-- End section of automatically generated text -->

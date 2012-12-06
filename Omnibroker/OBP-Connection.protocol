@@ -1,0 +1,274 @@
+Protocol OBPConnection OBP
+
+	Message Message
+		Abstract
+
+	Message Response   
+		Abstract
+		Inherits Message
+		Integer Status
+			Description
+				|Application layer server status code
+		String StatusDescription
+			Description
+				|Describes the status code (ignored by processors)
+		Status Success
+			Description
+				|The operation succeeded.
+
+	Message ErrorResponse
+		Inherits Response
+		Description
+			|An error response MAY be returned in response to any request.
+		Description
+			|Note that requests MAY be rejected by the code implementing
+			|the transport binding before application processing begins
+			|and so a server is not guaranteed to provide an error response
+			|message.
+		Status Unknown
+
+	Message Request   
+		Abstract
+		Inherits Message
+
+
+	Structure Cryptographic	
+		Label Protocol
+			Description
+				|OBP tickets MAY be restricted to use with either the management
+				|protocol (Management) or the query protocol (Query). If so a 
+				|service would typically 
+				|specify a ticket with a long expiry time or no expiry for use with 
+				|the management protocol and a separate ticket for use with the 
+				|query protocol.
+		Binary Secret
+			Required		
+			Description
+				|Shared secret
+		Label Encryption 
+			Required
+			Description
+				|Encryption Algorithm selected
+		Label Authentication 
+			Required
+			Description
+				|Authentication Algorithm selected
+		Binary Ticket	
+			Required		
+			Description
+				|Opaque ticket issued by the server that identifies
+				|the cryptographic parameters for encryption and
+				|authentication of the message payload.
+		DateTime Expires 
+			Description
+				|Date and time at which the context will expire
+		Description
+			|Parameters describing a cryptographic context.
+	Structure ImageLink  
+		Label Algorithm		
+			Description
+				|Image encoding algorithm (e.g. JPG, PNG)
+		Binary Image
+			Description
+				|Image data as specified by algorithm
+	Structure Connection	
+		Description
+			|Contains information describing a network connection.
+		Name		Name
+			Description
+				|DNS Name. Since one of the functions of an OBP service is name
+				|resolution, a DNS name is only used to establish a connection if
+				|connection by means of the IP address fails.
+		Integer Port		
+			Description
+				|TCP or UDP port number.
+		String Address		
+			Description
+				|IPv4 (32 bit) or IPv6 (128 bit) service address
+		Integer Priority	
+			Description
+				|Service priority. Services with lower priority numbers SHOULD
+				|be attempted before those with higher numbers.
+		Integer Weight		
+			Description
+				|Weight to be used to select between services of equal priority.
+		Label Transport	
+			Description
+				|OBP Transport binding to be used valid values are HTTP, DNS and UDP.
+		DateTime Expires 
+			Description
+				|Date and time at which the specified connection context will expire.
+		Struct Cryptographic Cryptographic
+			Description
+				|Cryptographic Parameters.
+	Transaction Bind 
+		Request		BindRequest
+		Response	BindResponse
+		Request		OpenRequest
+		Response	OpenResponse
+		Request		TicketRequest
+		Response	TicketResponse
+		Description
+			|Binding a device is a two step protocol that begins with the
+			|Start Query followed by a sequence of Ticket queries.
+	Message BindRequest
+		Abstract
+		Inherits		Request
+		Description
+			|The following parameters MAY occur in either a
+			|StartRequest or TicketRequest:
+		Label Encryption 
+			Multiple
+			Description
+				|Encryption Algorithm that the client accepts. A Client MAY
+				|offer multiple algorithms. If no algorithms are specified then
+				|support for the mandatory to implement algorithm is assumed.
+				|Otherwise mandatory to implement algorithms MUST be 
+				|specified explicitly.
+		Label Authentication
+			Multiple
+			Description
+				|Authentication Algorithm that the client accepts.
+				|If no algorithms are specified then
+				|support for the mandatory to implement algorithm is assumed.
+				|Otherwise mandatory to implement algorithms MUST be 
+				|specified explicitly. 
+	Message BindResponse	
+		Abstract
+		Inherits	Response		
+		Description
+			|The following parameters MAY occur in either a
+			|StartResponse or TicketResponse:
+		Struct Cryptographic Cryptographic
+			Multiple
+			Description
+				|Cryptographic Parameters.
+		Struct Connection Service	
+			Multiple
+			Description
+				|A Connection describing an OBP service point
+
+
+	Message OpenRequest		
+		Inherits	BindRequest
+		Description
+			|The OpenRequest Message is used to begin a device binding transaction.
+			|Depending on the authentication requirements of the service the
+			|transaction may be completed in a single query or require a 
+			|further Ticket Query to complete.
+		Description
+			|If authentication is required, the mechanism to be used depends on
+			|the capabilities of the device, the requirements of the broker and
+			|the existing relationship between the user and the broker.
+		Description
+			|If the device supports some means of data entry, authentication 
+			|MAY be achieved by entering a passcode previously delivered out
+			|of band into the device.
+		String Account			
+			Description
+				|Account name of the user at the OBP service
+		Name Domain			
+			Description
+				|Domain name of the OBP broker service
+		Boolean HavePasscode	
+			Default		"False"
+			Description
+				|If 'true', the user has entered a passcode value for 
+				|use with passcode authentication.
+		Boolean HaveDisplay		
+			Default		"False"
+			Description
+				|Specifies if the device is capable of displaying information
+				|to the user or not.
+		Binary Challenge	
+			Description
+				|Client challenge value to be used in authentication challenge
+				|mechanism as described in section <xref target="ChallengeResponse"/>
+		URI DeviceID		
+			Description
+				|Device identifier unique for a particular instance of a device such as a MAC or EUI-64 address expressed as a URI
+		URI DeviceURI		
+			Description
+				|Device identifier specifying the type of device, e.g. an xPhone.
+		Struct ImageLink DeviceImage
+			Description
+				|An image identifying the physical appearance of the device. 
+		String DeviceName		
+			Description
+				|Descriptive name for the device that would distinguish it 
+				|from other similar devices, e.g. 'Alice's xPhone".
+		Description
+			|The OpenRequest specifies the properties of the service
+			|(Account, Domain) and Device (ID, URI, Name) that will remain
+			|constant throughout the period that the device binding is active
+			|and parameters to be used for the mutual authentication protocol.
+	
+	
+	Message OpenResponse	
+		Inherits	BindResponse
+
+		Binary Challenge	
+			Description
+				|Challenge value to be used by the client to respond
+				|to the server authentication challenge.
+		Binary ChallengeResponse	
+			Description
+				|Server response to authentication challenge by the client
+				|as described in section <xref target="ChallengeResponse"/>
+		Struct ImageLink VerificationImage	
+			Multiple
+			Description
+				|Link to an image to be used in an image verification mechanism.
+		Description
+			|An Open request MAY be accepted immediately or be held pending
+			|completion of an inband or out-of-band authentication process.
+		Description
+			|The OpenResponse returns a ticket and a set of cryptographic
+			|connection parameters in either case. If the 
+		Status		Complete
+			|The OpenRequest was accepted and the binding parameters
+			|specified are now active.
+		Status		Pending
+			|The OpenRequest is being held pending offline verification 
+			|of the parameters.
+		Status		Passcode
+			|The OpenRequest is being held pending completion of the
+			|passcode authentication mechanism.
+	Message TicketRequest	
+		Description
+			|The TicketRequest message is used to (1) complete a binding request
+			|begun with an OpenRequest and (2) to refresh ticket or connection 
+			|parameters as necessary.
+		Inherits		Request
+
+		Binary ChallengeResponse	
+			Description
+				|The response to a serer authentication challenge 
+				|as described in section <xref target="ChallengeResponse"/>
+	Message TicketResponse	
+		Inherits	BindResponse
+		Description
+			|The TicketResponse message returns cryptographic and/or connection
+			|context information to a client.
+	Transaction Unbind 
+		Request		UnbindRequest
+		Response	UnbindResponse
+		Description
+			|Requests that a previous device association be deleted.
+	Message UnbindRequest	
+		Inherits	Request
+		Description
+			|Since the ticket identifies the binding to be deleted, the
+			|only thing that the unbind message need specify is that
+			|the device wishes to cancel the binding.
+	Message UnbindResponse	
+		Inherits	Response
+		Description
+			|Reports on the success of the unbinding operation.
+		Description
+			|If the server reports success, the client SHOULD delete the
+			|ticket and all information relating to the binding.
+		Description
+			|A service MAY continue to accept a ticket after an unbind request
+			|has been granted but MUST NOT accept such a ticket for
+			|a bind request.

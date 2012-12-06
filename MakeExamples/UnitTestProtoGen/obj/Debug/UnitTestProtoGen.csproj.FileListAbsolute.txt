@@ -1,0 +1,5 @@
+C:\Users\Phillip\Visual Studio 2010\Projects\ProtoGen\Example\UnitTestProtoGen\bin\Debug\UnitTestProtoGen.dll
+C:\Users\Phillip\Visual Studio 2010\Projects\ProtoGen\Example\UnitTestProtoGen\bin\Debug\UnitTestProtoGen.pdb
+C:\Users\Phillip\Visual Studio 2010\Projects\ProtoGen\Example\UnitTestProtoGen\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Phillip\Visual Studio 2010\Projects\ProtoGen\Example\UnitTestProtoGen\obj\Debug\UnitTestProtoGen.dll
+C:\Users\Phillip\Visual Studio 2010\Projects\ProtoGen\Example\UnitTestProtoGen\obj\Debug\UnitTestProtoGen.pdb

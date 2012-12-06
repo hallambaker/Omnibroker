@@ -1,0 +1,29 @@
+﻿Class OBPConnect
+	Brief "Omnibroker Query Service"
+
+	Type NewFile			"file"
+	Type ExistingFile		"file"
+	Type String				"string"
+	Type Integer			"int"
+	Type Flag				"flag"
+
+	Command Server "server"
+		DefaultCommand
+		Brief "Launch omnibroker query service"
+		Parameter Configuration "config" ExistingFile
+
+		Option Log "log" NewFile
+			Brief "Log activity in the specified file"
+
+		Option Detach "detach" Flag
+			Brief "Run in a separate process"
+
+		Option WebService "ws" Integer
+			Brief "Provide the Web Service Transport on the specified port"
+
+		Option UDP "udp" Integer
+			Brief "Provide the Web Service Transport on the specified port"
+
+		Option DNS "dns" Integer
+			Brief "Provide the Web Service Transport on the specified port"
+

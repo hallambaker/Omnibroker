@@ -1,0 +1,354 @@
+﻿
+
+
+
+<section title="OBPQuery">
+
+
+<section title="Message: QMessage">
+
+
+<!-- No parameters -->
+
+</section>
+<section title="Message: QRequest">
+
+<t>
+Every query request contains the following common elements:
+</t>
+
+<t> <list style="hanging" hangIndent="6">
+<t hangText="Index : Integer [0..1]   "></t>
+<t>
+Index used to request a specific response when multiple 
+responses are available.
+</t>
+</list></t>
+
+</section>
+<section title="Message: QResponse">
+
+<t>
+Every Query Response contains the following common elements:
+</t>
+
+<t> <list style="hanging" hangIndent="6">
+<t hangText="Status : Integer [1..1]   "></t>
+<t>
+Status return code value
+</t>
+<t hangText="Index : Integer [0..1]   "></t>
+<t>
+Index of the current response.
+</t>
+<t hangText="Count : Integer [0..1]   "></t>
+<t>
+Number of responses available.
+</t>
+</list></t>
+
+</section>
+<section title="Structure: Identifier">
+
+<t>
+Specifies an Internet service by means of a DNS address and either a
+DNS service prefix, an IP port number or both. An Internet peer 
+connection MAY be specified by additionally specifying an account.
+</t>
+
+<t> <list style="hanging" hangIndent="6">
+<t hangText="Name : Name [1..1]   "></t>
+<t>
+The DNS name of the service to connect to.
+</t>
+<t>
+Internationalized DNS names MUST be encoded in punycode
+encoding.
+</t>
+<t hangText="Account : Label [0..1]   "></t>
+<t>
+Identifies the account to connect to in the case that a peer connection
+is to be established.
+</t>
+<t hangText="Service : Name [0..1]   "></t>
+<t>
+The DNS service prefix defined for use with DNS records that
+take a service prefix including SRV.
+</t>
+<t hangText="Port : Integer [0..1]   "></t>
+<t>
+IP Port number.
+</t>
+<t>
+A service identifier MUST specify either a service or a port or both.						
+</t>
+</list></t>
+
+</section>
+<section title="Structure: Connection">
+
+
+<t> <list style="hanging" hangIndent="6">
+<t hangText="IPAddress : String [0..1]   "></t>
+<t>
+IP address in string representation
+</t>
+<t hangText="IPPort : Integer [0..1]   "></t>
+<t>
+IP port. 1-65535
+</t>
+<t hangText="Transport : String [0..1]   "></t>
+<t>
+Transport (RAW, TLS, IPSEC)
+</t>
+<t hangText="TransportPolicy : String [0..1]   "></t>
+<t>
+Transport security policy as specified in [TBS]
+</t>
+<t hangText="ProtocolPolicy : String [0..1]   "></t>
+<t>
+Application security policy specification as specified by 
+the application protocol.
+</t>
+<t hangText="Advice : Advice [0..1]   "></t>
+<t>
+Additional information that a service MAY return to support
+a service connection identification. 
+</t>
+</list></t>
+
+</section>
+<section title="Structure: Credential">
+
+
+<t> <list style="hanging" hangIndent="6">
+<t hangText="Type : String [0..1]   "></t>
+<t hangText="Data : Binary [0..1]   "></t>
+</list></t>
+
+</section>
+<section title="Structure: Advice">
+
+<t>
+Additional information that a service MAY return to support
+a service connection identification. For example, DNSSEC 
+signatures chains, SAML assertions, DANE records, 
+Certificate Transparency proof chains, etc.
+</t>
+
+<t> <list style="hanging" hangIndent="6">
+<t hangText="Type : Label [0..1]   "></t>
+<t>
+The IANA MIME type of the content type
+</t>
+<t hangText="Data : Binary [0..1]   "></t>
+<t>
+The advice data.
+</t>
+</list></t>
+
+</section>
+<section title="Structure: Service">
+
+<t>
+Describes a service connection
+</t>
+
+<t> <list style="hanging" hangIndent="6">
+<t hangText="Identifier : Identifier [0..Many]   "></t>
+<t>
+Internet addresses to which the service is to be bound.
+</t>
+<t hangText="Connection : Connection [0..1]   "></t>
+<t>
+Service connection parameters.
+</t>
+</list></t>
+
+</section>
+<section title="QueryConnect">
+
+<t>
+Requests a connection context to connect to a specified Internet service
+or peer.
+</t>
+
+</section>
+<section title="Message: QueryConnectRequest">
+
+<t>
+Specifies the Internet
+service or peer that a connection is to be established to and the
+acceptable security policies.
+</t>
+
+<t> <list style="hanging" hangIndent="6">
+<t hangText="Identifier : Identifier [0..1]   "></t>
+<t>
+Identifies the service or peer to which a connection is 
+requested.
+</t>
+<t hangText="Policy : Label [0..Many]   "></t>
+<t>
+Acceptable credential validation policy.
+</t>
+<t hangText="ProveIt : Boolean [0..1]   "></t>
+<t>
+If set the broker SHOULD send advice to permit the client to
+validate the proposed connection context.
+</t>
+</list></t>
+
+</section>
+<section title="Message: QueryConnectResponse">
+
+<t>
+Returns one or more connection contexts in response to a 
+QueryConnectRequest Message.
+</t>
+
+<t> <list style="hanging" hangIndent="6">
+<t hangText="Connection : Connection [0..Many]   "></t>
+<t>
+An ordered list of connection contexts with the preferred
+connection context listed first.
+</t>
+<t hangText="Advice : Advice [0..1]   "></t>
+<t>
+Proof information to support the proposed connection context.
+</t>
+<t hangText="Policy : Label [0..Many]   "></t>
+<t>
+Policy under which the credentials have been verified.	
+</t>
+</list></t>
+
+</section>
+<section title="Advertise">
+
+<t>
+Advises a broker that one or more Internet services are 
+being offered with particular attributes.
+</t>
+
+</section>
+<section title="Message: AdvertiseRequest">
+
+<t>
+Specifies the connection(s) to be established.
+</t>
+<t>
+The attributes required depend on the infrastructure(s) that the 
+broker is capable of registering the service with.
+</t>
+
+<t> <list style="hanging" hangIndent="6">
+<t hangText="Service : Service [0..Many]   "></t>
+<t>
+Describes a connection to be established.
+</t>
+</list></t>
+
+</section>
+<section title="Message: AdvertiseResponse">
+
+<t>
+Specifies the connection(s)
+</t>
+
+<t> <list style="hanging" hangIndent="6">
+<t hangText="Service : Service [0..Many]   "></t>
+<t>
+Describes a connection that was established.
+</t>
+</list></t>
+
+</section>
+<section title="Validate">
+
+<t>
+The Validate query requests validation of credentials
+presented to establish a connection. For example credentials
+presented by a server in the process of setting up a 
+TLS session.
+</t>
+
+</section>
+<section title="Message: ValidateRequest">
+
+<t>
+Specifies the credentials to be validated and the purpose
+for which they are to be used.
+</t>
+
+<t> <list style="hanging" hangIndent="6">
+<t hangText="Service : Service [0..1]   "></t>
+<t>
+Describes the service for which the credentials 
+are presented for access.
+</t>
+<t hangText="Credential : Credential [0..1]   "></t>
+<t>
+List of credentials for which validation is requested.
+</t>
+<t hangText="Policy : Label [0..Many]   "></t>
+<t>
+Policy under which the credentials have been verified.	
+</t>
+</list></t>
+
+</section>
+<section title="Message: ValidateResponse">
+
+<t>
+Reports the status of the credential presented.
+</t>
+
+<t> <list style="hanging" hangIndent="6">
+<t hangText="Policy : Label [0..Many]   "></t>
+<t>
+Policy under which the credentials have been verified.	
+</t>
+</list></t>
+
+</section>
+<section title="QueryCredentialPassword">
+
+<t>
+The QueryCredentialPassword query is used to request a password credential
+that the user has previously chosen to store at the broker.
+</t>
+
+</section>
+<section title="Message: CredentialPasswordRequest">
+
+<t>
+Requests a password for the specified account.
+</t>
+
+<t> <list style="hanging" hangIndent="6">
+<t hangText="Account : String [0..1]   "></t>
+<t>
+The account for which a password is requested.
+</t>
+</list></t>
+
+</section>
+<section title="Message: CredentialPasswordResponse">
+
+<t>
+Returns a password for the specified account.
+</t>
+
+<t> <list style="hanging" hangIndent="6">
+<t hangText="Password : String [0..1]   "></t>
+<t>
+The requested password.
+</t>
+</list></t>
+
+</section>
+
+</section>
+
+

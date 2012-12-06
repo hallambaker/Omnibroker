@@ -1,0 +1,24 @@
+﻿Class OBPClient
+	Brief "Omnibroker Client"
+
+	Type NewFile			"file"
+	Type ExistingFile		"file"
+	Type String				"string"
+	Type Integer			"int"
+	Type Flag				"flag"
+
+	Command Resolve "resolve"
+		DefaultCommand
+		Parameter Domain "domain" String
+		Parameter Service "service" String
+		Option Verbose "verbose" String
+
+	Command Bind "bind"
+		Parameter Account "account" String
+		Parameter PIN "pin" String
+
+		Option Server "server" String
+		Option Port "port" Integer
+		
+	Command Unbind "unbind"
+		

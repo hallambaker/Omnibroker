@@ -1,0 +1,9 @@
+C:\Users\Phillip\Code\Applications\Omnibroker\MakeExamples\obj\x86\Debug\ConsoleApplication.exe
+C:\Users\Phillip\Code\Applications\Omnibroker\MakeExamples\obj\x86\Debug\ConsoleApplication.pdb
+C:\Users\Phillip\Code\Applications\Omnibroker\MakeExamples\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Phillip\Code\Applications\Omnibroker\MakeExamples\bin\Debug\ConsoleApplication.exe
+C:\Users\Phillip\Code\Applications\Omnibroker\MakeExamples\bin\Debug\ConsoleApplication.pdb
+C:\Users\Phillip\Code\Applications\Omnibroker\MakeExamples\bin\Debug\Goedel.Protocol.dll
+C:\Users\Phillip\Code\Applications\Omnibroker\MakeExamples\bin\Debug\OmniLib.dll
+C:\Users\Phillip\Code\Applications\Omnibroker\MakeExamples\bin\Debug\OmniLib.pdb
+C:\Users\Phillip\Code\Applications\Omnibroker\MakeExamples\bin\Debug\Goedel.Registry.dll

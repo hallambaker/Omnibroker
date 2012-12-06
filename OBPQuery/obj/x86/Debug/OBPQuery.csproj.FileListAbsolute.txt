@@ -1,0 +1,9 @@
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPQuery\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPQuery\bin\Debug\OBPQuery.exe
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPQuery\bin\Debug\OBPQuery.pdb
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPQuery\bin\Debug\Goedel.Registry.dll
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPQuery\bin\Debug\OmniLib.dll
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPQuery\bin\Debug\Goedel.Protocol.dll
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPQuery\bin\Debug\OmniLib.pdb
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPQuery\obj\x86\Debug\OBPQuery.exe
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPQuery\obj\x86\Debug\OBPQuery.pdb

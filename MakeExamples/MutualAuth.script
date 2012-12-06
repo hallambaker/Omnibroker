@@ -1,0 +1,11 @@
+﻿#script 1.0
+#license MITLicense
+#using TestProtoGen
+#using Goedel.Protocol
+#using OBPConnection
+#pclass OmnibrokerExample Generate
+#method MutualAuth ExampleData Example
+
+
+#end method
+#end pclass

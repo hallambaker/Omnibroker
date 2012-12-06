@@ -1,0 +1,9 @@
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPConnect\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPConnect\bin\Debug\Goedel.Registry.dll
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPConnect\bin\Debug\OmniLib.dll
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPConnect\bin\Debug\Goedel.Protocol.dll
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPConnect\bin\Debug\OmniLib.pdb
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPConnect\bin\Debug\OBPConnect.exe
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPConnect\bin\Debug\OBPConnect.pdb
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPConnect\obj\x86\Debug\OBPConnect.exe
+C:\Users\Phillip\Code\Applications\Omnibroker\OBPConnect\obj\x86\Debug\OBPConnect.pdb
